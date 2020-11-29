@@ -15,9 +15,10 @@ endif::[]
 
 = Elf, a CLI for Elfin
 
-In the course of using link:https://github.com/11in/elfin[Elfin] there are some repetitive tasks you may need to do with a package like this, so there's a CLI to help you with some of those.
+In the course of using link:https://github.com/11in/elfin[Elfin] you may encounter some tasks that you feel could be automated to save you time.
+Fortunately there is a friendly elf here to...helf you.
 
-If you find yourself needing a particular tool in the CLI, feel free to submit a PR or a feature request issue.
+If you find yourself needing a particular tool in the CLI, feel free to link:https://github.com/11in/elf/pulls[submit a PR] or a link:https://github.com/11in/elf/issues/new[feature request issue].
 
 == Installation
 

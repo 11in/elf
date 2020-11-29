@@ -1,12 +1,18 @@
 {
   "name": "@11in/elf",
-  "version": "1.0.2-alpha",
+  "version": "1.0.3-alpha",
   "description": "A CLI for Elfin",
   "main": "elf.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["elfin","eleventy","11ty","scaffold","cli"],
+  "keywords": [
+    "elfin",
+    "eleventy",
+    "11ty",
+    "scaffold",
+    "cli"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/11in/elf.git"
@@ -20,7 +26,7 @@
     "elf": "./elf"
   },
   "homepage": "https://github.com/11in/elf#readme",
-  "devDependencies": {
+  "dependencies": {
     "chalk": "^4.1.0",
     "gray-matter": "^4.0.2",
     "luxon": "^1.25.0",

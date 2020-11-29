@@ -26,7 +26,7 @@ While you can install this locally, by far the most useful install location is "
 
 [source,bash]
 ----
-$ npm i -g 11in/elf
+$ npm i -g @11in/elf
 ----
 
 == Usage

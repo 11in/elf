@@ -10,8 +10,9 @@ const {
     logError
 } = require('./helpers')
 
+const pkgPath = join(process.cwd(), 'package.json')
 try {
-    const package = require(join(process.cwd(), 'package.json'))
+    const package = require(pkgPath)
 
     require('yargs/yargs')(process.argv.slice(2))
         .scriptName('elf')
@@ -25,10 +26,8 @@ try {
         })
         .argv
 } catch (err) {
-    if ('MODULE_NOT_FOUND' === err.code) {
+    if (err.message.indexOf(pkgPath) > -1) {
         logError("Please run me from the project root!")
-        return;
     }
-
-    console.error(err)
+    throw err
 }

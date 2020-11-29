@@ -1,0 +1,19 @@
+{
+  "name": "elf",
+  "version": "1.0.0-alpha",
+  "description": "A CLI for Elfin",
+  "main": "elf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/11in/elf.git"
+  },
+  "author": "Ben <ben@alwaysblank.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/11in/elf/issues"
+  },
+  "homepage": "https://github.com/11in/elf#readme"
+}

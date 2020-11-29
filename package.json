@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/11in/elf/issues"
   },
-  "homepage": "https://github.com/11in/elf#readme"
+  "bin": {
+    "elf": "./elf"
+  },
+  "homepage": "https://github.com/11in/elf#readme",
+  "devDependencies": {
+    "chalk": "^4.1.0",
+    "gray-matter": "^4.0.2",
+    "luxon": "^1.25.0",
+    "mustache": "^4.0.1",
+    "rimraf": "^3.0.2",
+    "yargs": "^16.1.1"
+  }
 }

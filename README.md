@@ -1,2 +1,0 @@
-# elf
-A CLI tool

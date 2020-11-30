@@ -1,5 +1,43 @@
 const chalk = require("chalk")
 
+function findConfig() {
+    const {
+        join
+    } = require('path')
+    const searchPath = process.cwd()
+    return require(join(searchPath, 'elf.config.js'))
+}
+
+function changeToRoot() {
+    const {
+        join
+    } = require('path')
+    const searchPath = process.cwd()
+    try {
+        findConfig()
+        logNotice(`Running from ${filePath(process.cwd())}`)
+        return true;
+    } catch (err) {
+        if (err.message.indexOf('elf.config.js') > -1) {
+            process.chdir('../') // move up one level
+            if (searchPath === process.cwd()) {
+                throw new Error("I couldn't find an Elf config file!")
+            }
+            return changeToRoot()
+        }
+
+        throw err
+    }
+}
+
+function logNotice(msg) {
+    console.log(chalk.blue(`ℹ️ ${msg}`))
+}
+
+function filePath(path) {
+    return chalk.bgGreen.black(` ${path} `)
+}
+
 module.exports = {
     logError: error => {
         console.log(chalk.bgRed.white(`⚠️ Oh No!`))
@@ -12,12 +50,8 @@ module.exports = {
         console.log(``)
         console.log(chalk.blue(`✅ ${msg}`))
     },
-    logNotice: msg => {
-        console.log(chalk.blue(`ℹ️ ${msg}`))
-    },
-    filePath: path => {
-        return chalk.bgGreen.black(` ${path} `)
-    },
+    logNotice,
+    filePath,
     makeRelative: path => {
         return path.replace(`${process.cwd()}/`, '')
     },
@@ -26,5 +60,7 @@ module.exports = {
     },
     getSubcommand: yargs => {
         return yargs.getContext().commands.join(' ')
-    }
+    },
+    findConfig,
+    changeToRoot
 }

@@ -43,7 +43,16 @@ function compileContent({
 }) {
     let processed = {};
     for (const [key, value] of Object.entries(frontmatter)) {
-        processed[key] = render(value, argv)
+        const valueType = typeof value;
+        switch (valueType) {
+            case 'function':
+                processed[key] = value(argv)
+                break
+
+            default:
+                processed[key] = render(value, argv)
+                break
+        }
     }
     return stringify(argv.content, processed)
 }
@@ -67,6 +76,7 @@ function writeContent({
 
     return mkdir(dir)
         .catch(err => {
+            // If this already exists, that's ok
             if ('EEXIST' === err.code) {
                 return Promise.resolve
             }
@@ -89,7 +99,9 @@ function writeContent({
         })
 }
 
-function createMakeCommand({name}) {
+function createMakeCommand({
+    name
+}) {
     let {
         singular,
         module,
@@ -102,17 +114,17 @@ function createMakeCommand({name}) {
     if (undefined === module.handler) {
         module.handler = (argv) => {
             writeContent({
-                argv,
-                pathTemplate: contentPath,
-                content: compileContent({
                     argv,
-                    frontmatter,
-                }),
-            })
-            .then(value => {
-                logSuccess(`Created new ${singular} "${argv.title}" at ${filePath(value)}`)
-            })
-            .catch(err => console.error(err))
+                    pathTemplate: contentPath,
+                    content: compileContent({
+                        argv,
+                        frontmatter,
+                    }),
+                })
+                .then(value => {
+                    logSuccess(`Created new ${singular} "${argv.title}" at ${filePath(value)}`)
+                })
+                .catch(err => console.error(err))
         }
     }
 

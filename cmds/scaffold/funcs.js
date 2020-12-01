@@ -1,23 +1,28 @@
-const {
-    readFile,
-    writeFile
-} = require('fs/promises')
-const {
-    basename
-} = require('path')
-const {
-    logProgress,
-    filePath,
-    makeRelative,
-    logNotice,
-    makeSafe,
-} = require('../../helpers')
-const {
-    render
-} = require('mustache')
-
 module.exports = {
-    createStub: ({stub, destination, modify, argv}) => {
+    createStub: ({
+        stub,
+        destination,
+        modify,
+        argv
+    }) => {
+        const {
+            logProgress,
+            filePath,
+            logNotice,
+            makeSafe,
+        } = require('../../helpers')
+        const {
+            parse,
+            basename,
+        } = require('path')
+        const {
+            readFile,
+            writeFile,
+            mkdir,
+        } = require('fs/promises')
+        const {
+            dir
+        } = parse(destination)
         if (argv.stub) {
             stub = argv.stub
             logNotice(`Using custom stub ${filePath(argv.stub)}`)
@@ -27,8 +32,20 @@ module.exports = {
         const destFilename = basename(destination)
         const stubFilename = basename(stub)
 
-        return readFile(stub, 'utf-8')
-            .then(async content => {
+        return mkdir(dir)
+            .catch(err => {
+                // If directory already exists, that's ok
+                if ('EEXIST' === err.code) {
+                    return Promise.resolve
+                }
+
+                throw err
+            })
+            .then(() => readFile(stub, 'utf-8'))
+            .then(content => {
+                const {
+                    render
+                } = require('mustache')
                 // Allow for mustache templating
                 let toWrite = render(content, {
                     extension_name: makeSafe(argv.name),
@@ -40,30 +57,37 @@ module.exports = {
                 if (undefined !== modify) {
                     toWrite = modify(content)
                 }
-                try {
-                    await writeFile(destination, toWrite, {
-                        flag: 'wx',
-                    })
-                    logProgress(`Wrote ${filePath(destFilename)}`)
-                    return Promise.resolve
-                } catch (error) {
-                    if (`EEXIST` === error.code) {
-                        return Promise.reject(`${destFilename} already exists`)
-                    }
 
-                    // If it's a different error, push that up the chain
-                    return Promise.reject(error)
-                }
+                return writeFile(destination, toWrite, {
+                    flag: 'wx',
+                })
             })
             .catch(err => {
                 if ('ENOENT' === err.code) {
                     return Promise.reject(`${filePath(stubFilename)} stub could not be found!`)
                 }
 
-                return Promise.reject(err)
+                if ('EEXIST' === err.code) {
+                    return Promise.reject(`${destFilename} already exists`)
+                }
+
+                throw err
             })
+            .then(() => logProgress(`Wrote ${filePath(destFilename)}`))
     },
     insertIntoLoader: (loaderPath, confPath, insertAfter) => {
+        const {
+            basename
+        } = require('path')
+        const {
+            readFile,
+            writeFile
+        } = require('fs/promises')
+        const {
+            logProgress,
+            filePath,
+            makeRelative,
+        } = require('../../helpers')
         const confRequire = `require('${confPath}')(conf);`
         const confRequireFile = basename(confPath);
 
@@ -83,16 +107,11 @@ module.exports = {
                 rows.splice(line + 1, 0, `\t${confRequire}`)
                 return rows.join(`\n`)
             })
-            .then(async updated => {
-                try {
-                    await writeFile(loaderPath, updated, {
-                        flag: 'w',
-                    })
-                    logProgress(`Updated ${filePath(makeRelative(loaderPath))}`)
-                    return Promise.resolve
-                } catch (error) {
-                    Promise.reject(error)
-                }
+            .then(updated => {
+                return writeFile(loaderPath, updated, {
+                    flag: 'w',
+                })
             })
+            .then(() => logProgress(`Updated ${filePath(makeRelative(loaderPath))}`))
     }
 }

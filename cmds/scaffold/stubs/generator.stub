@@ -1,0 +1,16 @@
+{{=<% %>=}}
+module.exports = {
+    name: '<% name %>',
+    singular: '<% singular %>',
+    template: {
+        contentPath: `content/<% name %>/{{ slug }}.md`,
+        frontmatter: {
+            title: `{{ title }}`,
+            date: `{{ date }}`,
+        }
+    },
+    module: {
+        command: '<% name %> <title>',
+        desc: '<% desc %>',
+    }
+}

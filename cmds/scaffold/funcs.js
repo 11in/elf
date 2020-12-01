@@ -75,7 +75,7 @@ module.exports = {
             })
             .then(() => logProgress(`Wrote ${filePath(destFilename)}`))
     },
-    insertIntoLoader: (loaderPath, confPath, insertAfter) => {
+    insertIntoLoader: ({loaderPath, confPath, insertAfter, requireStatement}) => {
         const {
             basename
         } = require('path')
@@ -88,7 +88,7 @@ module.exports = {
             filePath,
             makeRelative,
         } = require('../../helpers')
-        const confRequire = `require('${confPath}')(conf);`
+        const confRequire = requireStatement || `require('${confPath}')(conf);`
         const confRequireFile = basename(confPath);
 
         return readFile(loaderPath, 'utf-8')
@@ -98,7 +98,8 @@ module.exports = {
                 }
 
                 let rows = content.split(`\n`)
-                const line = rows.indexOf(insertAfter)
+                console.log(rows)
+                const line = rows.findIndex(row => insertAfter.test(row))
 
                 if (-1 === line) {
                     return Promise.reject(`Unable to find "insert after" line in leader`)

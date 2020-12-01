@@ -1,0 +1,9 @@
+module.exports = {
+    functions: {
+        scaffold: {},
+        generators: {
+            commands: [
+            ]
+        }
+    }
+}

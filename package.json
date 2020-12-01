@@ -28,6 +28,7 @@
   "homepage": "https://github.com/11in/elf#readme",
   "dependencies": {
     "chalk": "^4.1.0",
+    "find-up": "^5.0.0",
     "gray-matter": "^4.0.2",
     "luxon": "^1.25.0",
     "mustache": "^4.0.1",

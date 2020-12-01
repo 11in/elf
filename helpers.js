@@ -1,37 +1,50 @@
 const chalk = require("chalk")
 
 function findConfig() {
-    const {
-        join
-    } = require('path')
-    const searchPath = process.cwd()
-    return require(join(searchPath, 'elf.config.js'))
+    const configPath = locateConfig()
+
+    if (undefined === configPath) {
+        return {}
+    }
+
+    return require(configPath)
 }
 
 function changeToRoot() {
-    const {
-        join
-    } = require('path')
-    const searchPath = process.cwd()
-    try {
-        findConfig()
-        logNotice(`Running from ${filePath(process.cwd())}`)
-        return true;
-    } catch (err) {
-        if (err.message.indexOf('elf.config.js') > -1) {
-            process.chdir('../') // move up one level
-            if (searchPath === process.cwd()) {
-                throw new Error("I couldn't find an Elf config file!")
-            }
-            return changeToRoot()
+    
+    const configLocation = locateConfig()
+    let runningDir = process.cwd()
+    if (undefined !== configLocation) {
+        const {
+            parse
+        } = require('path')
+        const {
+            dir
+        } = parse(configLocation)
+        if (dir !== runningDir) {
+            process.chdir(dir)
+            runningDir = dir
         }
-
-        throw err
+        logNotice(`Running from ${runningDir}`)
+        return;
     }
+
+    logError("I couldn't find an Elf config file!")
+    logNotice("If you would like to generate a config file in the current directly, run `elf make-config`")
+}
+
+function locateConfig() {
+    const findUp = require("find-up")
+    return findUp.sync('elf.config.js')
 }
 
 function logNotice(msg) {
     console.log(chalk.blue(`ℹ️ ${msg}`))
+}
+
+function logError(msg) {
+    console.log(chalk.bgRed.white(`⚠️ Oh No!`))
+    console.error(msg)
 }
 
 function filePath(path) {
@@ -39,10 +52,7 @@ function filePath(path) {
 }
 
 module.exports = {
-    logError: error => {
-        console.log(chalk.bgRed.white(`⚠️ Oh No!`))
-        console.error(error)
-    },
+    logError,
     logProgress: msg => {
         console.log(chalk.green(msg))
     },

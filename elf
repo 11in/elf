@@ -3,15 +3,44 @@
 const {
     logError,
     changeToRoot,
-    findConfig
+    findConfig,
+    logNotice
 } = require('./helpers')
 
-// Make sure we're in the root
-changeToRoot()
+// Make sure we're in the root, but skip if we're making a config
+if ('make-config' !== process.argv[process.argv.length - 1]) {
+    changeToRoot()
+}
 
 require('yargs/yargs')(process.argv.slice(2))
     .scriptName('elf')
     .commandDir('cmds')
+    .command('make-config', "Make a default config file in the current directory", {}, argv => {
+        const {
+            writeFile,
+            readFile
+        } = require('fs/promises')
+        const {
+            join
+        } = require('path')
+        readFile(join(__dirname, 'stubs', 'elf.config.js.stub'))
+            .then(content => {
+                return writeFile(join(process.cwd(), 'elf.config.js'), content, {
+                    flag: 'wx'
+                })
+            })
+            .catch(err => {
+                if ('EEXIST' === err.code) {
+                    logError(`Config already exists!`)
+                    process.exit(1)
+                }
+
+                throw err
+            })
+            .then(() => {
+                logNotice('Created empty config!')
+            })
+    })
     .demandCommand()
     .config(findConfig())
     .help()

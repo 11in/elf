@@ -46,5 +46,7 @@ Elf will only work if you run it in the root of an Elfin project.
 == Tools
 
 include::docs/make-config.adoc[leveloffset=+2]
+
 include::docs/scaffold.adoc[leveloffset=+2]
+
 include::docs/generate.adoc[leveloffset=+2]

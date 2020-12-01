@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-exports.command = 'scaffold <command>'
+exports.command = ['scaffold <command>', 'scf <command>']
 exports.description = 'Scaffold useful things'
 exports.builder = (yargs) => {
   return yargs

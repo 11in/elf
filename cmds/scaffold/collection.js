@@ -53,5 +53,11 @@ exports.handler = function (argv) {
     })
     .then(() => insertIntoLoader(collectionIndex, `./${fileName}`, `module.exports = conf => {`))
     .then(() => logSuccess(`${argv.name} added in ${filePath(makeRelative(collectionFile))}`))
+    .then(() => {
+      if (argv.open) {
+        const edit = require('open-editor')
+        edit([collectionFile])
+      }
+    })
     .catch(error => logError(error))
 }

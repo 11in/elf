@@ -1,6 +1,5 @@
 module.exports = conf => {
     conf.addFilter('{{ extension_name }}', arg => {
-        {{ help || 'cool' }}
         // return `filtered ${arg}`
     })
 }

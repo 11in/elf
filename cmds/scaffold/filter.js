@@ -39,5 +39,11 @@ exports.handler = function (argv) {
     })
     .then(() => insertIntoLoader(filterIndex, `./${fileName}`, `module.exports = conf => {`))
     .then(() => logSuccess(`${argv.name} added in ${filePath(makeRelative(filterFile))}`))
+    .then(() => {
+      if (argv.open) {
+        const edit = require('open-editor')
+        edit([filterFile])
+      }
+    })
     .catch(error => logError(error))
 }

@@ -3,7 +3,8 @@ const {
   logSuccess,
   filePath,
   makeRelative,
-  makeSafe
+  makeSafe,
+  getSubcommand,
 } = require('../../helpers')
 const {
   createStub,
@@ -34,8 +35,15 @@ exports.handler = function (argv) {
   createStub({
       stub: stubPath,
       destination: shortcodeFile,
+      argv,
     })
     .then(() => insertIntoLoader(shortcodeIndex, `./${fileName}`, `module.exports = conf => {`))
     .then(() => logSuccess(`${argv.name} added in ${filePath(makeRelative(shortcodeFile))}`))
+    .then(() => {
+      if (argv.open) {
+        const edit = require('open-editor')
+        edit([shortcodeFile])
+      }
+    })
     .catch(error => logError(error))
 }

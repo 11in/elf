@@ -25,7 +25,7 @@ const {
 function getCollectionConfig(collection) {
     const {
         functions: {
-            make: {
+            generators: {
                 commands
             }
         }

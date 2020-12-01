@@ -3,7 +3,7 @@ const {
     DateTime
 } = require("luxon");
 
-exports.command = 'make <command>'
+exports.command = ['generate <title>', 'gen <title>']
 exports.description = 'Make content, or at least the beginnings of content'
 exports.builder = (yargs) => {
     const {
@@ -11,17 +11,18 @@ exports.builder = (yargs) => {
     } = require('../helpers')
     const {
         createMakeCommand
-    } = require('./make/funcs')
+    } = require('./generate/funcs')
     const {
         functions: {
-            make: {
+            generators: {
                 commands
             }
         }
     } = findConfig();
 
     let newYargs = yargs
-        .commandDir('make')
+        .commandDir('generate')
+        .alias('gen', 'generate')
         .options({
             'slug': {
                 alias: 's',

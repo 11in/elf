@@ -1,11 +1,17 @@
 {
   "name": "@11in/elf",
-  "version": "1.1.0-alpha",
+  "version": "1.1.1-alpha",
   "description": "A CLI for Elfin",
   "main": "elf.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "files": [
+    "elf",
+    "helpers.js",
+    "LICENSE",
+    "README.adoc",
+    "cmds/*",
+    "docs/*",
+    "stubs/*"
+  ],
   "keywords": [
     "elfin",
     "eleventy",

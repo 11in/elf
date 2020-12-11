@@ -1,15 +1,13 @@
 {
   "name": "@11in/elf",
-  "version": "1.1.1-alpha",
+  "version": "1.1.2-alpha",
   "description": "A CLI for Elfin",
   "main": "elf.js",
   "files": [
     "elf",
     "helpers.js",
     "LICENSE",
-    "README.adoc",
     "cmds/*",
-    "docs/*",
     "stubs/*"
   ],
   "keywords": [
@@ -31,7 +29,7 @@
   "bin": {
     "elf": "./elf"
   },
-  "homepage": "https://github.com/11in/elf#readme",
+  "homepage": "https://elfin.netlify.app/docs/elf/",
   "dependencies": {
     "chalk": "^4.1.0",
     "find-up": "^5.0.0",

@@ -54,7 +54,7 @@ exports.handler = function (argv) {
         .then(() => insertIntoLoader({
             loaderPath: collectionIndex,
             confPath: `./${fileName}`,
-            insertAfter: `module.exports = conf => {`,
+            insertAfter: /module\.exports = conf => {/,
             requireStatement: `require('./${makeRelative(collectionFile)}'),`
         }))
         .then(() => logSuccess(`${argv.name} added in ${filePath(makeRelative(collectionFile))}`))

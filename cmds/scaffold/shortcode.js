@@ -40,7 +40,7 @@ exports.handler = function (argv) {
         .then(() => insertIntoLoader({
             loaderPath: shortcodeIndex,
             confPath: `./${fileName}`,
-            insertAfter: `module.exports = conf => {`,
+            insertAfter: /module\.exports = conf => {/,
             requireStatement: `require('./${makeRelative(shortcodeFile)}'),`
         }))
         .then(() => logSuccess(`${argv.name} added in ${filePath(makeRelative(shortcodeFile))}`))

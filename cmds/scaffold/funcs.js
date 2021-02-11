@@ -98,7 +98,6 @@ module.exports = {
                 }
 
                 let rows = content.split(`\n`)
-                console.log(rows)
                 const line = rows.findIndex(row => insertAfter.test(row))
 
                 if (-1 === line) {
